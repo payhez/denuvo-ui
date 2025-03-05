@@ -37,9 +37,8 @@ export class ProjectService {
     return this.http.get<Project[]>(`${this.apiUrl}/customer`,  { params });
   }
 
-  exportProjects(startDate: string, endDate: string): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/between-dates?startDate=${startDate}&endDate=${endDate}`, {
-      responseType: 'blob'
-    });
+  downloadProjectsAsZip(fromDate: string, toDate: string) {
+    const url = `/between-dates/zip?fromDate=${fromDate}&toDate=${toDate}`;
+    return this.http.get(url, { responseType: 'blob' });
   }
 }

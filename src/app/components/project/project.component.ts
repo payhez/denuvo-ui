@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Project } from '../../models/project';
 import { ProjectService } from '../../services/project.service';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CustomerEditModalComponent } from '../customer-edit-modal/customer-edit-modal.component';
 import { ProjectEditModalComponent } from '../project-edit-modal/project-edit-modal.component';
+import { Customer } from '../../models/customer';
+import { CustomerService } from '../../services/customer.service';
 
 @Component({
   selector: 'app-project',
-  imports: [ FormsModule ],
+  imports: [ FormsModule, ReactiveFormsModule ],
   templateUrl: './project.component.html',
   styleUrl: './project.component.css'
 })
@@ -19,11 +20,55 @@ export class ProjectComponent implements OnInit {
   newProject: Project = { name: '', description: '', customerId: 0 };
   queryId: number = 0;
   message: string = '';
+  allCustomers: Customer[] = [];
+  downloadForm!: FormGroup;
 
-  constructor(private projectService: ProjectService, private modalService: NgbModal) { }
+  constructor(
+    private projectService: ProjectService, 
+    private modalService: NgbModal,
+    private customerService: CustomerService,
+    private fb: FormBuilder,
+  ) { 
+      this.downloadForm = this.fb.group({
+        fromDate: ['', Validators.required],
+        toDate: ['', Validators.required]
+      });
+    }
 
   ngOnInit(): void {
+    this.loadCustomers();
     this.loadProjects();
+  }
+
+  downloadZip() {
+    if (this.downloadForm.invalid) {
+      return;
+    }
+    const { fromDate, toDate } = this.downloadForm.value;
+    this.projectService.downloadProjectsAsZip(fromDate, toDate)
+      .subscribe(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'projects.zip';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      }, error => {
+        console.error('Error downloading ZIP file', error);
+      });
+  }
+
+  loadCustomers() {
+    this.customerService.getCustomers().subscribe(
+      data => {
+        this.allCustomers = data;
+      },
+      err => {
+        console.error('Error loading customers', err);
+      }
+    );
   }
 
   openEditModal(project: Project) {
@@ -72,6 +117,7 @@ export class ProjectComponent implements OnInit {
       },
       err => {
         console.error(err);
+        alert("Error creating project")
         this.message = 'Error creating project';
       }
     );

@@ -52,7 +52,7 @@
                 <h5>Project Details</h5>
                 <p>ID: {{ selectedProject.id }}</p>
                 <p>Name: {{ selectedProject.name }}</p>
-                <p>Contact: {{ selectedProject.description }}</p>
+                <p>Description: {{ selectedProject.description }}</p>
                 <p>Creation Date: {{ selectedProject.creationDate }}</p>
                 <p>Owned By: {{ selectedProject.customerId }}</p>
               </div>
@@ -70,11 +70,35 @@
           <input type="text" id="newName" class="form-control" [(ngModel)]="newProject.name">
         </div>
         <div class="form-group">
-          <label for="newContact">Description</label>
-          <input type="contact" id="newContact" class="form-control" [(ngModel)]="newProject.description">
+          <label for="newDescription">Description</label>
+          <input type="description" id="newDescription" class="form-control" [(ngModel)]="newProject.description">
+        </div>
+        <div class="form-group">
+          <label for="newCustomer">Customer</label>
+          <select id="newCustomer" class="form-control" [(ngModel)]="newProject.customerId">
+            @for (customer of allCustomers; track customer) {
+              <option [value]="customer.id">
+                {{ customer.name }}
+              </option>
+            }
+          </select>
         </div>
         <button class="btn btn-success" (click)="createProject()">Create</button>
       </div>
+    </div>
+    <div class="download-container">
+      <h2>Download Projects as ZIP</h2>
+      <form [formGroup]="downloadForm" (ngSubmit)="downloadZip()">
+        <div>
+          <label for="fromDate">From Date:</label>
+          <input type="date" id="fromDate" formControlName="fromDate">
+        </div>
+        <div>
+          <label for="toDate">To Date:</label>
+          <input type="date" id="toDate" formControlName="toDate">
+        </div>
+        <button type="submit" [disabled]="downloadForm.invalid">Download ZIP</button>
+      </form>
     </div>
   </div>
   
