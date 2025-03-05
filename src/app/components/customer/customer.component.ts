@@ -20,7 +20,8 @@ export class CustomerComponent implements OnInit {
   queryId: number = 0;
   message: string = '';
 
-  constructor(private customerService: CustomerService, 
+  constructor(
+    private customerService: CustomerService, 
     private projectService: ProjectService,
     private modalService: NgbModal) { }
 
@@ -54,7 +55,19 @@ export class CustomerComponent implements OnInit {
   queryCustomer() {
     if (!this.queryId) return;
     this.customerService.getCustomer(this.queryId).subscribe(
-      data => this.selectedCustomer = data,
+      retrievedCustomer => {
+        this.selectedCustomer = retrievedCustomer;
+        this.projectService.getProjectsOfCustomer(this.queryId).subscribe(
+          data => {
+            if (this.selectedCustomer != null) {
+              this.selectedCustomer.projects = data 
+            }
+          },
+          err => {
+            console.error(err);
+          }
+        );
+      },
       err => {
         console.error(err);
         alert("Customer not found!");

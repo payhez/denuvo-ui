@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -30,6 +30,11 @@ export class ProjectService {
 
   deleteProject(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  getProjectsOfCustomer(customerId: number): Observable<Project[]> {
+    const params = new HttpParams().set('customerId', customerId.toString());
+    return this.http.get<Project[]>(`${this.apiUrl}/customer`,  { params });
   }
 
   exportProjects(startDate: string, endDate: string): Observable<Blob> {

@@ -15,8 +15,6 @@
             <tr>
               <th>ID</th>
               <th>Name</th>
-              <th>Contact</th>
-              <th>Creation Date</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -25,8 +23,6 @@
                     <tr>
                         <td>{{ customer.id }}</td>
                         <td>{{ customer.name }}</td>
-                        <td>{{ customer.contact }}</td>
-                        <td>{{ customer.creationDate }}</td>
                         <td>
                         <button class="btn btn-sm btn-primary mr-2" (click)="openEditModal(customer)">Update</button>
                         <button class="btn btn-sm btn-danger" (click)="deleteCustomer(customer.id == undefined ? 0 : customer.id)">Delete</button>
@@ -55,6 +51,10 @@
                 <p>Name: {{ selectedCustomer.name }}</p>
                 <p>Contact: {{ selectedCustomer.contact }}</p>
                 <p>Creation Date: {{ selectedCustomer.creationDate }}</p>
+                <p>Owned Project(s): 
+                  @for (project of selectedCustomer.projects; track project) {
+                    {{ project.name }},
+                  }</p>
               </div>
         }
       </div>
