@@ -3,4 +3,5 @@ export interface Customer {
     name: string;
     contact: string;
     creationDate?: Date;
+    projects?: string[];
   }

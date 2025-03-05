@@ -25,7 +25,7 @@ export class ProjectService {
   }
 
   updateProject(id: number, project: Project): Observable<Project> {
-    return this.http.put<Project>(`${this.apiUrl}/${id}`, project);
+    return this.http.patch<Project>(`${this.apiUrl}/${id}`, project);
   }
 
   deleteProject(id: number): Observable<void> {
@@ -33,7 +33,7 @@ export class ProjectService {
   }
 
   exportProjects(startDate: string, endDate: string): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/export?startDate=${startDate}&endDate=${endDate}`, {
+    return this.http.get(`${this.apiUrl}/between-dates?startDate=${startDate}&endDate=${endDate}`, {
       responseType: 'blob'
     });
   }

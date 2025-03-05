@@ -2,6 +2,6 @@ export interface Project {
     id?: number;
     name: string;
     description: string;
-    creationDate: Date;
+    creationDate?: Date;
     customerId: number;
   }

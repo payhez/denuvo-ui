@@ -4,6 +4,7 @@ import { CustomerService } from '../../services/customer.service';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CustomerEditModalComponent } from '../customer-edit-modal/customer-edit-modal.component';
+import { ProjectService } from '../../services/project.service';
 
 @Component({
   selector: 'app-customer',
@@ -19,7 +20,9 @@ export class CustomerComponent implements OnInit {
   queryId: number = 0;
   message: string = '';
 
-  constructor(private customerService: CustomerService, private modalService: NgbModal) { }
+  constructor(private customerService: CustomerService, 
+    private projectService: ProjectService,
+    private modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.loadCustomers();
@@ -34,6 +37,7 @@ export class CustomerComponent implements OnInit {
       if (isCustomerUpdated) {
         this.message = 'Customer updated successfully!';
       } else {
+        alert("Customer update failed!");
         this.message = 'Customer update failed!';
       }
       this.loadCustomers();
@@ -53,6 +57,7 @@ export class CustomerComponent implements OnInit {
       data => this.selectedCustomer = data,
       err => {
         console.error(err);
+        alert("Customer not found!");
         this.message = 'Customer not found';
         this.selectedCustomer = null;
       }
@@ -83,6 +88,7 @@ export class CustomerComponent implements OnInit {
       },
       err => {
         console.error(err);
+        alert("Error deleting customer");
         this.message = 'Error deleting customer';
       }
     );
