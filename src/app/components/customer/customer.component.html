@@ -1,0 +1,81 @@
+<div class="container mt-4">
+    <h2>Customer Management</h2>
+    
+    <!-- Display a message if available --> 
+    @if(message) {<div class="alert alert-info">{{ message }}</div>}
+    
+    <!-- List all customers -->
+    <div class="card mb-4">
+      <div class="card-header">
+        All Customers
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered">
+          <thead class="thead-light">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Contact</th>
+              <th>Creation Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+                @for (customer of customers; track customer) {
+                    <tr>
+                        <td>{{ customer.id }}</td>
+                        <td>{{ customer.name }}</td>
+                        <td>{{ customer.contact }}</td>
+                        <td>{{ customer.creationDate }}</td>
+                        <td>
+                        <button class="btn btn-sm btn-primary mr-2" (click)="openEditModal(customer)">Update</button>
+                        <button class="btn btn-sm btn-danger" (click)="deleteCustomer(customer.id == undefined ? 0 : customer.id)">Delete</button>
+                        </td>
+                    </tr>
+                }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Query a customer by ID -->
+    <div class="card mb-4">
+      <div class="card-header">
+        Query Customer by ID
+      </div>
+      <div class="card-body">
+        <div class="form-inline">
+          <input type="number" class="form-control mr-2" placeholder="Customer ID" [(ngModel)]="queryId">
+          <button class="btn btn-info" (click)="queryCustomer()">Query</button>
+        </div>
+        @if (selectedCustomer) {
+            <div class="mt-3">
+                <h5>Customer Details</h5>
+                <p>ID: {{ selectedCustomer.id }}</p>
+                <p>Name: {{ selectedCustomer.name }}</p>
+                <p>Contact: {{ selectedCustomer.contact }}</p>
+                <p>Creation Date: {{ selectedCustomer.creationDate }}</p>
+              </div>
+        }
+      </div>
+    </div>
+    
+    <!-- Create a new customer -->
+    <div class="card mb-4">
+      <div class="card-header">
+        Create Customer
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label for="newName">Name</label>
+          <input type="text" id="newName" class="form-control" [(ngModel)]="newCustomer.name">
+        </div>
+        <div class="form-group">
+          <label for="newContact">Contact</label>
+          <input type="contact" id="newContact" class="form-control" [(ngModel)]="newCustomer.contact">
+        </div>
+        <button class="btn btn-success" (click)="createCustomer()">Create</button>
+      </div>
+    </div>
+  </div>
+  

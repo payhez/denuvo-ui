@@ -8,7 +8,7 @@ import { Customer } from '../models/customer';
   providedIn: 'root'
 })
 export class CustomerService {
-  private apiUrl = `${environment.apiUrl}/customers`;
+  private apiUrl = `${environment.apiUrl}/customer`;
 
   constructor(private http: HttpClient) { }
 
@@ -25,7 +25,7 @@ export class CustomerService {
   }
 
   updateCustomer(id: number, customer: Customer): Observable<Customer> {
-    return this.http.put<Customer>(`${this.apiUrl}/${id}`, customer);
+    return this.http.patch<Customer>(`${this.apiUrl}/${id}`, customer);
   }
 
   deleteCustomer(id: number): Observable<void> {
